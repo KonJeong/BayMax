@@ -1,0 +1,64 @@
+<script>
+
+flash_message = '<%= flash[:alert] %>';
+if(flash_message != "") alert(flash_message);
+if(flash_message == "정보가 수정되었습니다."){
+	if(<%= @member.Class %> == 1) parent.location.href = "/";
+	else parent.location.href = "/seller_home";
+}
+</script>
+
+<div align=center><br><font size=5, color="#662500"><b>정보수정</b></font></div><br><br><br><br>
+<%= form_for :member, url: join_path(@member), method: :patch do |f| %>
+	<table width="85%" border="1" cellspacing="0" cellpadding="10" align="center" frame="hsides" rules="rows">
+		<tr>
+			<th width="25%" bgcolor="#F6F6F6"><font size=3>아이디</font></th>
+			<td width="75%">&nbsp;&nbsp;&nbsp;<%= f.text_field :User_id, required:true, maxlength:16, autofocus:true %></td>
+		</tr>
+		<tr>
+		    <th bgcolor="#F6F6F6"><font size=3>비밀번호 확인</font></th>
+		    <td>&nbsp;&nbsp;&nbsp;<%= f.password_field :Password_prev, maxlength:16, required:true %></td>
+		</tr>
+		<tr>
+		    <th bgcolor="#F6F6F6"><font size=3>비밀번호 변경</font></th>
+		    <td>&nbsp;&nbsp;&nbsp;<%= f.password_field :Password, maxlength:16 %></td>
+		</tr>
+		<tr>
+		    <th bgcolor="#F6F6F6"><font size=3>비밀번호 확인</font></th>
+		    <td>&nbsp;&nbsp;&nbsp;<%= f.password_field :Password_chk, maxlength:16 %></td>
+		</tr>
+		<tr>
+		    <th bgcolor="#F6F6F6"><font size=3>이름</font></th>
+		    <td>&nbsp;&nbsp;&nbsp;<%= f.text_field :Name, maxlength:8, required:true %></td>
+		</tr>
+		<tr>
+		    <th bgcolor="#F6F6F6"><font size=3>성별</font></th>
+		    <td>&nbsp;&nbsp;&nbsp;<%= f.radio_button("Sex", "male") %> 남자
+				<%= f.radio_button("Sex", "female") %> 여자</td>
+		</tr>
+		<tr>
+		    <th bgcolor="#F6F6F6"><font size=3>생년월일</font></th>
+		    <td>&nbsp;&nbsp;&nbsp;<%= f.date_field :Birth %></td>
+		</tr>
+		<tr>
+		    <th bgcolor="#F6F6F6"><font size=3>Email</font></th>
+		    <td>&nbsp;&nbsp;&nbsp;<%= f.email_field :Email, size:25, maxlength:25, required:true %></td>
+		</tr>
+		<tr>
+		    <th bgcolor="#F6F6F6"><font size=3>전화번호</font></th>
+		    <td>&nbsp;&nbsp;&nbsp;<%= f.telephone_field :Phone, size:11, maxlength:11, required:true %> </td>
+		</tr>
+		<tr>
+		    <th bgcolor="#F6F6F6"><font size=3>주소</font></td>
+		    <td>&nbsp;&nbsp;&nbsp;<%= f.text_field :Address, size:60, maxlength:50, required:true %></td>
+		</tr>
+		<tr>
+		    <th bgcolor="#F6F6F6"><font size=3>회원유형 전환</font></th>
+		    <td>&nbsp;&nbsp;&nbsp;<%= f.radio_button("Class", "1") %> 구매자
+				<%= f.radio_button("Class", "2") %> 판매자</td>
+		</tr>
+	</table>
+
+<br><br>
+<div align=center><%= f.submit '확인' %></div>
+<% end %>

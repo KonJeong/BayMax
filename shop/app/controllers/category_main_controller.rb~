@@ -1,0 +1,10 @@
+class CategoryMainController < ApplicationController
+	def index
+		@notice = Notice.where("Category is ?", params[:param_category]).all
+		@hot_item=@notice.order('Seller_count DESC')
+
+		@notice_list = @notice.order('Id DESC')
+		@order_lowprice = @notice.order('Price ASC')
+		@order_highprice = @notice.order('Price DESC')
+	end
+end

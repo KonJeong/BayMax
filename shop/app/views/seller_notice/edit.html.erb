@@ -1,0 +1,70 @@
+<html>
+<head></head>
+<body>
+<%= form_for :notice, url: seller_notice_path(@notice), method: :patch do |f| %>
+<table width="90%" cellspacing="0" cellpadding="20" border="0" align="center">
+ <tr>
+  <td align="center"><h2>게시물 수정<br><br></h2></td>
+ </tr>
+ <tr>
+  <td align="center">
+   <table width="95%" rules="rows" border="1" cellspacing="0" cellpadding="10" frame="hsides">
+    <tr>
+     <th width="20%" align="center" bgcolor="#EAEAEA">&nbsp;<font size=4>번호</font></th>
+     <td width="80%" colspan=2><font size=4> 
+      <%= @notice.id %>
+      <%= f.hidden_field :id, :value => @notice.id %></font>
+      <%= f.hidden_field :Seller_id, :value => current_user[:User_id] %>
+     </td>
+    </tr>
+    <tr>
+     <th align="center" bgcolor="#EAEAEA"><font size=4>게시물 제목</font></th>
+     <td colspan=2><%= f.text_field :Title, maxlength:50 %></td>
+    </tr>
+    <tr>
+     <th width=20% align="center" bgcolor="#EAEAEA"><font size=4>메인 사진</font></th>
+     <td width=15%><%= image_tag(@notice.picture.url, size:"90")%></td>	   
+     <td width=65%><%= f.file_field :picture %></td>
+    </tr>
+    <tr>
+     <th align="center" bgcolor="#EAEAEA"><font size=4>판매 가격</font></th>
+     <td colspan=2><%= f.text_field :Price, size:10, maxlength:10 %></td>
+    </tr>
+    <tr>
+     <th align="center" bgcolor="#EAEAEA"><font size=4>배송비</font></th>
+     <td colspan=2><%= f.text_field :Deliver_charge, size:5, maxlength:5 %></td> 
+    </tr>
+    <tr>
+     <th align="center" bgcolor="#EAEAEA"><font size=4>성별</font></td>
+     <td colspan=2>
+      <%= f.radio_button("Sex", "male", :checked=>true) %> 남자
+      <%= f.radio_button("Sex", "female") %> 여자</td>
+    </tr>
+    <tr>
+     <th align="center" bgcolor="#EAEAEA"><font size=4>연령층</font></td>
+     <td colspan=2>
+      <%= f.select :Age, options_for_select(["선택하세요", "10대", "20대", "30대", "40대", "50대", "60대 이상"],
+                                             :disabled => ["선택하세요"], :selected => ["선택하세요"]) %>
+     </td>
+    </tr>
+    <tr>
+     <th align="center" bgcolor="#EAEAEA"><font size=4>카테고리</font></th>
+     <td colspan=2><%= f.select :Category, options_for_select(["선택하세요", "여성 상의", "여성 하의",
+					"여성 아우터", "여성 원피스", "여성 가방/신발", "남성 상의", 
+					"남성 하의", "남성 아우터", "남성 가방/신발"], :disabled =>
+					["선택하세요"], :selected => [@notice.Category]) %>
+     </td>
+    </tr>
+  
+   </table>
+   <tr>
+    <td align="center"><br>
+     <%= f.submit '확인', :type => :image, :src => image_path("confirm.jpg") %>&nbsp;&nbsp;&nbsp; <%= link_to image_tag("back.jpg"), seller_notice_index_path %>
+    </td>
+   </tr>
+  </td>
+ </tr>
+</table>
+<% end %>
+</body>
+</html>  

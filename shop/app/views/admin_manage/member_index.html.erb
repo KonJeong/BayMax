@@ -1,0 +1,56 @@
+<html>
+<head></head>
+<body>
+<table width = "90%" border = "0" cellspacing="0" cellpadding="0" align="center">
+  <tr><br><br><br></tr>
+ <tr>
+  <td align="center"><h2>전체 회원 목록<br><br><br></h2></td>
+ </tr>
+ <tr>
+  <td align="center">
+  		<%= form_for :search, url: manage_member_path do |f| %>
+			<%= f.select :column, options_for_select(["아이디", "이름", "전화번호", "이메일"]) %>
+			<%= f.search_field :searchStr, size:30 %>
+			<%= f.submit '검색' %>
+		<% end %>
+		<br>
+  </td>
+ </tr>
+ <tr><td align="center">
+  <table width = "90%" border = "1" cellpadding="10" align="center" bordercolor="#A6A6A6" style="border-collapse:collapse;" rules="rows" frame="hsides">
+   <tr bgcolor="#EAEAEA">
+    <th width="15%" align="center"> 아이디 </td>
+    <th width="10%" align="center"> 이름 </td>
+	<th width="10%" align="center"> 성별 </td>
+    <th width="20%" align="center"> 전화번호 </td>
+	<th width="20%" align="center"> 이메일 </td>
+	<th width="10%" align="center"> 분류 </td>
+	<th width="15%" align="center"> 관리 </td>
+   </tr>
+
+   <% @memberList.each do |member| %>
+    <tr>
+     <td align="center"><%= member.User_id %></td>
+     <td align="center"><%= member.Name %></td>
+	 <td align="center"><%= member.Sex %></td>
+	 <td align="center"><%= member.Phone %></td>
+	 <td align="center"><%= member.Email %></td>
+	 <td align="center"><%= member.Class %></td>
+	 <td align="center"><%= link_to image_tag("delete.jpg", size:"75x25"), manage_member_path(:User_id => member.User_id), method: :delete, data: { confirm: '정말로 삭제하시겠습니까?'} %></td>
+	</tr>
+   <% end %>
+  </td></table>
+ </tr>
+ <tr>
+	<td align="center"><br>
+	<% @ListArr.each do |list| %>
+		<% if @current_page.to_i == list.to_i %>
+			&nbsp;[<%= list %>]&nbsp;
+		<% else %>
+			[<%= link_to list, manage_member_path(:current_page => list) %>]
+		<% end %>
+	<% end %></td>
+ </tr>
+</table>
+</body>
+</html>

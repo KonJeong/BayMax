@@ -1,0 +1,25 @@
+<h1>ID 찾기</h1>
+<br><br><br>
+<table width="800" height="50" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td align="center"><font size=5> Email 확인 </font></td>
+	</tr>
+	<tr>
+		<td><br></td>
+	</tr>
+	<tr>
+		<td align="center"><%= @member.Email %></td>
+	</tr>
+	<tr>
+		<td><br><br><br></td>
+	</tr>
+	<tr>
+		<td align="center"><font size=5> ID 확인 </font></td>
+	</tr>
+	<tr>
+		<td><br></td>
+	</tr>
+	<tr>
+		<td align="center"><%= @member.User_id %></td>
+	</tr>
+</table>

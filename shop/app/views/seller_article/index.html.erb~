@@ -1,0 +1,157 @@
+<html>
+<head>
+	<style>
+		ul{padding: 0;}
+		.menu a{cursor:pointer;}
+		.menu .hide{display:none;}
+
+		.menu{list-style:none;}
+		.menu li{list-style:none;}
+		
+	</style>
+
+	<p><script>
+	    // html dom 이 다 로딩된 후 실행된다.
+	    $(document).ready(function(){
+		// menu 클래스 바로 하위에 있는 a 태그를 클릭했을때
+		$(".menu>a").click(function(){
+		    var submenu = $(this).next("ul");
+	 
+		    // submenu 가 화면상에 보일때는 위로 보드랍게 접고 아니면 아래로 보드랍게 펼치기
+		    if( submenu.is(":visible") ){
+		        submenu.slideUp();
+		    }else{
+		        submenu.slideDown();
+		    }
+		});
+	    });
+	</script></p>
+</head>
+<body>
+<table width="90%" border="0" cellpadding="20" align="center">
+ <tr>
+  <td align="center"><h2> Q&A 관리<br><br><br></h2></td>
+ </tr>
+</table>
+
+ <% if @totalCnt > 0 %>
+  <table width="90%" border="1" align="center" cellspacing="0" cellpadding="10" borercolor="#A6A6A6" rules="rows" frame="hsides" style="border-collapse:collapse;">
+    <tr bgcolor="#EAEAEA">
+     <th width="10%" align="center"> 글번호 </td>
+     <th width="10%" align="center"> 분류 </td>
+     <th width="50%" align="center"> 제목 </td>
+     <th width="10%" align="center"> 작성자 </td>
+     <th width="10%" align="center"> 등록일 </td>
+     <th width="10%" align="center"> 답변 </td>
+    </tr>
+   </table>
+  
+  
+  <div><ul>
+   <%  @articleList.each do |article| %>
+    <li class="menu">
+     <a>
+      <table width="90%" align="center" cellpadding="10" cellspacing="0" border="1" bordercolor="#EAEAEA" style="border-collapse:collapse;" rules="rows" frame="hsides">
+       <tr bgcolor="#F6F6F6">
+        <td width="10%" align="center"><%= article.id %></td>
+        <td width="10%" align="center"><%= article.Category %></td>
+        <td width="50%" align="center"><%= article.Title %></td>
+        <td width="10%" align="center"><%= article.User_id %></td>
+        <td width="10%" align="center"><%= article.created_at.to_formatted_s(:db) %></td>
+        <% if article.Reply? %>
+         <td width="10%" align="center">답변완료</td>
+        <% else %>
+         <td width="10%" align="center">미답변</td>
+        <% end %>
+       </tr>
+      </table>
+     </a>
+
+     <ul class="hide">
+      <li align="center">
+		<table width="60%" align="center" border="0" cellpadding="30">
+	        	<tr valign="middle">
+				<td align="center" width="20%" valign="middle"><font size=6 color="#0100FF">Q</font></td>
+				<td align="center" width="80%" valign="middle"><%= article.Contents %><br></td>
+			</tr>
+		</table>
+      
+       <% if article.Reply == "" %>
+        <li align="center">
+         <table width="60%" align="center" border="0" cellpadding="10">
+          <tr>
+           <td align="center" width="20%" valign="center"><font size=6 color="#0100FF">A</font></td>
+           <td align="center" width="80%" valign="center"><br><br><br>
+            <%= form_for (:article), method: :patch do |f| %>
+            <%= f.text_area(:article_reply, size: "50x8") %>
+            <%= f.hidden_field(:article_id, :value => article.id) %>
+           </td>
+	  </tr>
+	  <tr>
+	   <td colspan="2" align="center" valign="middle"><br>
+		<%= f.submit '등록' %>
+		<% end %>
+		<br><br><br><br><br><br>
+	   </td>
+          </tr>
+         </table>
+       </li>
+
+       <% else %>
+        <li align="center">
+	<table width="60%" align="center" border="0" cellpadding="30">
+	        <tr valign="middle">
+			<td align="center" valign="middle" width="20%"><font size=6 color="#0100FF">A</font></td>
+			<td align="center" valign="middle" width="80%"><%= article.Reply %><br></td>
+		</tr>
+		<tr align="right">
+			<td colspan="2" align="right"><font size=3 color="#A6A6A6"><br><%= article.updated_at.to_formatted_s(:db) %>에 답변을 등록하였습니다.<br><br></font></td>
+		</tr>
+	</table>
+        </li>
+       <% end %>
+      
+     </ul>
+    </li>
+   <% end %>
+  </ul></div>
+ 
+ <% else %>
+ <table width="90%" border="0" align="center" cellpadding="5" align="center">
+  <tr>
+   <td align="center"><br><br><br>
+    <h3> 문의글이 존재하지 않습니다.</h3>
+   </td>
+  </tr>
+  <tr>
+   <td align="center"><br><br><br>
+    <%= link_to '홈으로 돌아가기', seller_home_index_path %>
+   </td>
+  </tr>
+ </table>
+ <% end %>	  
+
+ 
+  <table width="90%" border="0" cellspacing="10" cellpadding="5" align="center">
+	<tr>
+		<td align="left">총 게시물: <%= @totalCnt %></td>
+		<td align="center">
+		<% @ListArr.each do |list| %>
+			[<%= link_to list, seller_article_path(:current_page => list) %>]
+		<% end %>
+		</td>
+		<td align="right">페이지: <%= @current_page %></td>
+		
+	</tr>
+  </table>
+
+</table>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</body>
+</html>

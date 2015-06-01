@@ -1,0 +1,52 @@
+<html>
+<head></head>
+<body>
+<%= form_for :product, url: {action: "create"}, :html => { :multipart => true} do |f| %>
+<table width="90%" align="center" border="0" cellspacing="0" cellpadding="0">
+ <tr>
+  <td align="center"><h1>상품 추가<br><br></h1></td>
+ </tr>
+ <tr>
+  <td align="center"><table width="100%" rules="rows" border="1" cellspacing="0" cellpadding="15" frame="hsides">
+   <tr>
+    <th width="20%" align="center" bgcolor="#EAEAEA"><font size=4>게시물 번호</font></th>
+	<td width="80%">&nbsp;&nbsp;&nbsp;
+	 <%= params[:param_noticeid] %>
+	 <%= f.hidden_field(:Notice_id, :value => params[:param_noticeid]) %>
+	</td>
+   </tr>
+   <tr>
+    <th width="20%" align="center" bgcolor="#EAEAEA"><font size=4>상품명</font></th>		
+    <td width="80%">&nbsp;&nbsp;&nbsp;
+	 <%= f.text_field :Name, size:50, maxlength:50 %>
+	</td>
+   </tr>
+   <tr>
+    <th align="center" bgcolor="#EAEAEA"><font size=4>추가 금액</font></th>
+    <td >&nbsp;&nbsp;&nbsp;
+	 <%= f.text_field :Price, size:10, maxlength:10 %>&nbsp;&nbsp;<font size=2 color="#8C8C8C">기준 금액에 추가되는 금액입니다.</font></td>
+   </tr>
+   <tr>
+    <th align="center" bgcolor="#EAEAEA"><font size=4>상품 사진</font></th>
+    <td>&nbsp;&nbsp;&nbsp;<%= f.file_field :picture %> </td>
+   </tr>
+   <tr>
+    <th align="center" bgcolor="#EAEAEA"><font size=4>재고</font></th>
+    <td>&nbsp;&nbsp;&nbsp;<%= f.text_field :Stock, size:10, maxlength:10 %></td>
+   </tr>
+   <tr>
+    <th align="center" bgcolor="#EAEAEA"><font size=4>사진 게시 여부</font></th>
+    <td>&nbsp;&nbsp;&nbsp;
+     <%= f.radio_button("Show_picture", "yes", :checked=>true) %> 예
+     <%= f.radio_button("Show_picture", "no") %> 아니요
+    </td>
+   </tr>
+  </table></td>
+ </tr>
+ <tr>
+  <td align="center"><br><br><br><%= f.submit '추가' %>&nbsp;&nbsp;&nbsp;<input type=button name=product_new_cancel value='취소'></td>
+ </tr>
+</table>
+<% end %>
+</body>
+</html>

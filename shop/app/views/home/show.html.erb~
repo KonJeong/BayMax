@@ -1,0 +1,69 @@
+<br><br><br>
+<font size=5 color="#FF007F"><b>★핫토픽 키워드</b></font><br>
+<%= javascript_include_tag "d3", "data-turbolinks-track" => true %>
+<%= javascript_include_tag "d3.layout.cloud", "data-turbolinks-track" => true %>
+
+<script>
+  var fill = d3.scale.category20();
+  var jWord = <%= raw @ArrWord %>;
+  var jCount = <%= @ArrCnt %>
+  var maxCount = d3.max(jCount);
+
+  d3.layout.cloud().size([800, 500])
+      .words(d3.zip(jWord, jCount).map(function(d) {
+        return {text: d[0], size: d[1]/maxCount*80+15 };
+      }))
+      .padding(4)
+	  .rotate(function() { return 0; })
+      .font("Impact")
+      .fontSize(function(d) { return d.size; })
+      .on("end", draw)
+      .start();
+
+  function draw(words) {
+    d3.select("body").append("svg")
+        .attr("width", 800)
+        .attr("height", 500)
+      .append("g")
+        .attr("transform", "translate(400,250)")
+      .selectAll("text")
+        .data(words)
+      .enter().append("text")
+        .style("font-size", function(d) { return d.size + "px"; })
+        .style("font-family", "Impact")
+        .style("fill", function(d, i) { return fill(i); })
+        .attr("text-anchor", "middle")
+        .attr("transform", function(d) {
+          return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+        })
+        .text(function(d) { return d.text; });
+  }
+</script>
+
+<br><br><br><br>
+<%= image_tag("recommendation.jpg", :size => "110x27") %><br><br>
+
+<table border="1"><tr><td>
+<div id="horizontal">
+	
+	<ul>
+	<% @recommend_item.each do |item| %>
+	<li>
+		<table width=185 border="0">
+			<tr>
+				<td><%= link_to image_tag(item.picture.url, size: "182"), notice_main_path(:param_noticeid => item.id) %></td>
+			</tr>
+			<tr height=80>
+				<td valign=top><br><%= link_to item.Title, notice_main_path(:param_noticeid => item.id), {:style=>'color:#000000; text-decoration:none;'} %></td>
+			</tr>
+			<tr>
+				<td valign=middle><b><%= item.Price %>원</b><br></td>
+			</tr>
+		</table>
+	</li>
+	<% end %>	
+	</ul>
+	
+</div>
+</td></tr></table>
+<br>

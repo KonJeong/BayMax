@@ -1,0 +1,21 @@
+<button onclick="javascript:location.reload();" >그래프 보기</button><br><br>
+<center><h1>총 매출 통계 보기</h1></center>
+<%= javascript_include_tag "//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js" %>
+<%= stylesheet_link_tag "//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css", "data-turbolinks-track" => true %>
+
+<div style="height: 500px;", class="ct-chart"></div>
+<script>
+	new Chartist.Line('.ct-chart', {
+	  labels: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
+	  series: [
+		[<%= @m1 %>, <%= @m2 %>, <%= @m3 %>, <%= @m4 %>, <%= @m5 %>, <%= @m6 %>, <%= @m7 %>, <%= @m8 %>, <%= @m9 %>, <%= @m10 %>, <%= @m11 %>, <%= @m12 %>]
+	  ]
+	}, {
+	  fullWidth: true,
+	  showArea: true,
+	  height: 500,
+	  chartPadding: {
+		right: 40
+	  }
+	});
+</script>

@@ -1,0 +1,209 @@
+<html>
+<head>
+	<style>
+		ul{padding: 0;}
+		.menu a{cursor:pointer;}
+		.menu .hide{display:none;}
+
+		.menu{list-style:none;}
+		.menu li{list-style:none;}
+		
+	</style>
+
+	<p><script>
+	    // html dom 이 다 로딩된 후 실행된다.
+	    $(document).ready(function(){
+		// menu 클래스 바로 하위에 있는 a 태그를 클릭했을때
+		$(".menu>a").click(function(){
+		    var submenu = $(this).next("ul");
+	 
+		    // submenu 가 화면상에 보일때는 위로 보드랍게 접고 아니면 아래로 보드랍게 펼치기
+		    if( submenu.is(":visible") ){
+		        submenu.slideUp();
+		    }else{
+		        submenu.slideDown();
+		    }
+		});
+	    });
+	</script></p>
+</head>
+<body>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="15">
+	<% @notice.each do |n| %>
+	<tr>
+		<td colspan=3><font size=5><b><%= n.Title %></b></font></td>
+	</tr>
+	<tr>
+		<td width="30%" rowspan=2><%= image_tag n.picture.url, size:"280" %></td>
+		<td colspan=2 valign=top>
+		<%= form_tag(notice_main_path, method: "get") do %>
+		<table width="100%" border="1" cellpadding="15"  style="border-collapse:collapse;" rules="none">
+			<tr>
+				<td width="25%" align=center bgcolor="#FFEAEA"><font size=4><b>판매가</b></font></td>
+				<td colspan=2 bgcolor="#FFEAEA"><font size=5 color="#FF0000"><b><%= n.Price %>원</b></font></td>
+			</tr>
+
+			<tr>
+				<td align=center style="border-bottom:1px solid" bordercolor="#A6A6A6"><b>배송비</b></td>
+				<td colspan=2 style="border-bottom:1px solid" bordercolor="#A6A6A6">
+				<% if n.Deliver_charge==0 %>
+					무료
+				<% else %>
+					<%= n.Deliver_charge %>원
+				<% end %></td>
+			</tr> 
+			
+			<tr>
+				<td align=center><b>선택</b></td>
+				
+				<td colspan=2><%= select_tag(:param_product_select_id, options_for_select(@product_list.collect{|p| [p.Name+"  (+"+p.Price.to_s+"원, 남은 상품: "+p.Stock.to_s+"개)", p.id]}, :selected => [@product_select_id])) %></td>
+			</tr>
+			
+			<tr>
+				<td align=center><b>수량</b></td>
+				<td width="30%"><%= text_field_tag(:param_product_num, @product_num, maxlength:2, size:3) %>개</td>
+				<td align=right><%= hidden_field_tag(:param_noticeid, n.id) %>
+				<%= hidden_field_tag(:param_ok, "ok")%>
+				<%= submit_tag("완료") %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+			</tr>
+		</table>
+		<% end %>
+		</td>
+	</tr>
+
+	<tr>
+	<% if logged_in? %>
+		<% @product_select.each do |p| %>
+			<% if params[:param_ok].present? %>
+				<% if p.Stock == 0 %>
+					<td colspan=2 align=center>선택하신 상품은 품절되었습니다 ㅠ.ㅠ</td>
+				<% else %>
+					<td align="center">
+					<%= link_to image_tag("buy.jpg", size:"120x40"), buy_new_path(:param_product_select_id => @product_select_id, :param_product_num => @product_num, :param_noticeid => n.id) %>
+					</td>
+	
+					<td>
+					<%= form_tag(shoppingbag_path, method: "post") do %>
+						<%= hidden_field_tag(:param_noticeid, n.id)%>
+						<%= hidden_field_tag(:param_noticetitle, n.Title)%>
+						<%= hidden_field_tag(:param_product_select_id, @product_select_id)%>
+						<%= hidden_field_tag(:param_productname, p.Name)%>
+						<%= hidden_field_tag(:param_productnum, @product_num)%>
+						<%= hidden_field_tag(:param_productprice, (n.Price + p.Price)*@product_num.to_i)%>
+						<%= hidden_field_tag(:param_deliver, n.Deliver_charge)%>
+						<%= image_submit_tag("shoppingbag.jpg", :size => "120x40") %>
+					<% end %>
+					</td>
+				<% end %>
+			<% else %>
+				<td colspan=2></td>
+			<% end %>
+		<% end %>
+	<% else %>
+		<td colspan=2 align=center>로그인이 필요한 서비스입니다~</td>
+	<% end %>
+	</tr>
+	
+	<% end %>
+</table><br><br><br>
+
+.......................................................................................................................................................................................................................................................................................................................................................................<br>
+<br><font size=4><b>> 상품정보</b></font><br><br><br><br>
+
+<div align=center>
+<% @product_list.each do |p| %>
+	<% if p.Show_picture == "yes" %>
+		<%= image_tag(p.picture) %><br><br>
+	<% end %>
+<% end %>
+</div>
+
+<br><br><br><br>
+.......................................................................................................................................................................................................................................................................................................................................................................<br>
+<br><font size=4><b>&nbsp;&nbsp;판매자에게 문의하기</b></font> &nbsp;&nbsp;<font color="#A6A6A6">상품,배송,취소/반품 등의 문의를 남겨주시면 판매자가 직접 답변을 드립니다.</font>
+<table width="95%" border="0" cellspacing="10" cellpadding="5" align="center">
+	<% @notice.each do |a| %>
+	<tr>
+		<td>
+			<%= form_tag(notice_main_path, method: "get") do %>
+				<%= label_tag(:q, "제목") %>
+				<%= text_field_tag(:q) %>
+				<%= hidden_field_tag(:param_noticeid, a.id) %>
+				<%= submit_tag("검색") %>
+			<% end %>
+		</td>
+		<td align="right"><%= link_to image_tag("article.jpg", size:"90x30"), notice_QnA_path(:param_id => a.id), target:"main_body" %></td>
+	</tr>
+	<tr><br><br></tr>
+	<% end %>
+</table>
+
+<table width="95%" align="center" border="1" cellpadding="5" bordercolor="#A6A6A6" style="border-collapse:collapse;" rules="rows" frame="hsides">
+	<tr bgcolor="#EAEAEA">
+		<th width = "10%" align="center"> 글번호 </td>
+		<th width = "10%" align="center"> 분류 </td>
+		<th width = "50%" align="center"> 제목 </td>
+		<th width = "10%" align="center"> 작성자 </td>
+		<th width = "10%" align="center"> 등록일 </td>
+		<th width = "10%" align="center"> 답변 </td>
+	</tr>
+</table>
+
+<% if @QnAList.present? %>
+<div><ul>
+	<%  @QnAList.each do |boardRow| %>
+	<li class="menu">
+		<a>
+		<table width="95%" border="1" bordercolor="#EAEAEA" style="border-collapse:collapse;" rules="rows" frame="hsides" align="center">
+		<tr>
+			<td width = "10%" align="center"><%= boardRow.id %></td>
+			<td width = "10%" align="center"><%= boardRow.Category %></td>
+			<td width = "50%" align="center"><%= boardRow.Title %></td>
+			<td width = "10%" align="center"><%= boardRow.User_id %></td>
+			<td width = "10%" align="center"><%= boardRow.created_at.to_formatted_s(:db) %></td>
+			<% if boardRow.Reply? %>
+				<td width = "10%" align="center">답변완료</td>
+			<% else %>
+				<td width = "10%" align="center">미답변</td>
+			<% end %>
+		</tr>
+		</table>
+		</a>
+		
+		<ul class="hide">
+			<li align=center><br><font size=6 color="#5D5D5D">Q&nbsp;&nbsp;&nbsp;</font><%= boardRow.Contents %><br></li>
+			
+			<% if boardRow.Reply? %>
+				<li align=center><br><font size=6 color="#0100FF">A&nbsp;&nbsp;&nbsp;</font><%= boardRow.Reply %><br></li>
+
+				<li align=right width="90%"><font size=3 color="#A6A6A6"><%= boardRow.updated_at.to_formatted_s(:db) %>에 답변을 등록하였습니다.</font><br><br></li>
+			<% end %>
+
+			<li align="right"><%= link_to '문의글 삭제', notice_main_path(:param_articleid => boardRow.id, :param_noticeid => boardRow.Notice_id), method: :delete, data: { confirm: '정말로 삭제하시겠습니까?'} %> &nbsp;&nbsp;&nbsp;<br><br></li>
+		</ul>
+	</li>
+	<% end %>
+</ul></div>
+
+<% else %>
+	<p align=center>등록된 문의가 없습니다.</p>
+<% end %>
+
+
+<table width="95%" border="0" cellspacing="10" cellpadding="5" align="center">
+	<tr>
+		<% @notice.each do |notice| %>
+		<td align="left">총 게시물: <%= @ArticleCnt %></td>
+		<td align="center">
+		<% @ListArr.each do |list| %>
+			[<%= link_to list, notice_main_path(:current_page => list, :param_noticeid => notice.id) %>]
+		<% end %>
+		</td>
+		<td align="right">페이지: <%= @current_page %></td>
+		<% end %>
+	</tr>
+</table>
+
+</body>
+</html>

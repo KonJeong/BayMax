@@ -1,0 +1,18 @@
+<br><font size=5, color="#662500"><b>비밀번호 찾기</b></font><br><br><br>
+<br><br><br>
+<div><h4><%= flash[:alert] %></h4></div>
+<%= form_for :search, url: {action: "pw_search_result"} do |f| %>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td align="center"><font size=5> ID 확인 </font></td>
+		<td align="center"><%= f.text_field :User_id, required:true, maxlength:16 %></td>
+	</tr>
+	<tr>
+		<td><br><br></td>
+	</tr>
+	<tr>
+		<td align="center"><font size=5> Email 확인 </font></td>
+		<td align="center"><%= f.email_field :Email, size:25, maxlength:25, required:true %> &nbsp;&nbsp; <%= f.submit '찾기' %></td>
+	</tr>
+</table>
+<% end %>

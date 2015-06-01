@@ -1,0 +1,63 @@
+<html>
+<head></head>
+<body>
+<%= form_for :product, url: product_path(@product), :html => { :multipart => true}, method: :patch do |f| %>
+<table width="90%" cellspacing="0" cellpadding="0" border="0" align="center">
+ <tr>
+  <td align="center"><h1>상품 수정<br><br><br></h1></td>
+ </tr>
+ <tr>
+  <td align="center">
+   <table width="95%" rules="rows" border="1" cellspacing="0" cellpadding="10" frame="hsides">
+    <tr>
+     <th width="20%" align="center" bgcolor="#EAEAEA"><font size=4>게시물 번호</font></th>
+     <td width="80%" colspan=2><font size=3> 
+      <%= @product.Notice_id %>
+      <%= f.hidden_field(:Notice_id, :value => @product.Notice_id) %>
+     </td>
+    </tr>
+    <tr>
+     <th width="20%" align="center" bgcolor="#EAEAEA"><font size=4>상품 번호</font></th>
+     <td width="80%" colspan=2><font size=3> 
+      <%= @product.id %>
+	  <%= f.hidden_field(:id, :value => @product.id) %>
+     </td>
+    </tr>
+    <tr>
+     <th align="center" bgcolor="#EAEAEA"><font size=4>상품명</font></th>
+     <td colspan=2><%= f.text_field :Name, :size => 50 %>
+     </td>
+    </tr>
+    <tr>
+     <th width=20%align="center" bgcolor="#EAEAEA"><font size=4>추가 금액</font></th>
+     <td width=10%><%= f.text_field :Price %></td>
+     <td width=70%><font size=2 color="#8C8C8C">기준 금액에 추가되는 금액입니다.<font size=2></td>
+    </tr>
+    <tr>
+     <th width=20% align="center" bgcolor="#EAEAEA"><font size=4>상품 사진</font></th>
+     <td width=15%><%= image_tag(@product.picture.url, size:"90")%></td>	   
+     <td width=65%><%= f.file_field :picture %></td>
+    </tr>
+    <tr>
+     <th align="center" bgcolor="#EAEAEA"><font size=4>재고</font></th>
+     <td colspan=2><%= f.text_field :Stock, maxlength:50 %></td>
+    </tr>
+    <tr>
+     <th align="center" bgcolor="#EAEAEA"><font size=4>사진 게시 여부</font></th>
+     <td colspan=2>&nbsp;&nbsp;&nbsp;
+      <%= f.radio_button("Show_picture", "yes", :checked=>true) %> 예
+      <%= f.radio_button("Show_picture", "no") %> 아니요
+     </td>
+    </tr>
+   </table>
+   <tr>
+    <td align="center"><br><br><br>
+     <%= f.submit '확인', :type => :image, :src => image_path("confirm.jpg") %>&nbsp;&nbsp;&nbsp; <%= link_to image_tag("back.jpg"), product_index_path %>
+    </td>
+   </tr>
+  </td>
+ </tr>
+</table>
+<% end %>
+</body>
+</html>  

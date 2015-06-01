@@ -1,0 +1,96 @@
+<script>
+flash_message = '<%= flash[:alert] %>';
+if(flash_message == "회원가입 성공!"){
+	alert(flash_message);
+	parent.location.href = "/"
+}
+
+first_id = "asdasd";
+function distinct(){
+	input_id = document.getElementById('member_User_id').value;
+
+	<% @check_id = Member.all %>
+	<% @check_id.each do |member| %>
+		search_id = "<%= member.User_id %>";
+		if(input_id == ''){
+			alert("입력이나 하세요");
+			return;
+		}
+		else if(input_id == search_id){
+			alert("이미 존재하는 아이디입니다!");
+			return;
+		}
+	<% end %>
+	alert("사용 가능한 아이디입니다!");
+
+}
+
+</script>
+
+<br><font size=5, color="#662500"><b>회원가입</b></font><br><br><br>
+
+<%= form_for :member, url: {action: "create"} do |f| %>
+<table width="80%" border="1" cellspacing="0" cellpadding="10" frame="hsides" rules="rows">
+	<tr>
+		<td width="23%"><font size=4>아이디<%= params[:id] %></font></td>
+
+		<td width="77%">&nbsp;&nbsp;&nbsp;<%= f.text_field :User_id, required:true, maxlength:16, autofocus:true %>
+		<button type='button' onclick="distinct();return false;">중복확인</button>
+		</td>
+	</tr>
+
+	<tr>
+		<td><font size=4>비밀번호</font></td>
+		<td>&nbsp;&nbsp;&nbsp;<%= f.password_field :Password, maxlength:16, required:true %></td>
+	</tr>
+
+	<tr>
+		<td><font size=4>비밀번호 확인</font></td>
+		<td>&nbsp;&nbsp;&nbsp;<%= f.password_field :Password_chk, maxlength:16, required:true %></td>
+	</tr>
+
+	<tr>
+		<td><font size=4>이름</font></td>
+		<td>&nbsp;&nbsp;&nbsp;<%= f.text_field :Name, maxlength:8, required:true %></td>
+	</tr>
+
+	<tr>
+		<td><font size=4>성별</font></td>
+		<td>&nbsp;&nbsp;&nbsp;<%= f.radio_button("Sex", "male", :checked=>true) %> 남자
+		<%= f.radio_button("Sex", "female") %> 여자</td>
+	</tr>
+
+	<tr>
+		<td><font size=4>생년월일</font></td>
+		<td>&nbsp;&nbsp;&nbsp;<%= f.date_field :Birth, required:true %></td>
+	</tr>
+
+	<tr>
+		<td><font size=4>Email</font></td>
+		<td>&nbsp;&nbsp;&nbsp;<%= f.email_field :Email, size:25, maxlength:25, required:true %></td>
+	</tr>
+
+	<tr>
+		<td><font size=4>전화번호</font></td>
+		<td>&nbsp;&nbsp;&nbsp;<%= f.telephone_field :Phone, size:11, maxlength:11, required:true %> 
+		</td>
+	</tr>
+
+	<tr>
+		<td><font size=4>주소</font></td>
+		<td>&nbsp;&nbsp;&nbsp;<%= f.text_field :Address, size:60, maxlength:50, required:true %>
+		</td>
+	</tr>
+
+	<tr>
+		<td><font size=4>사용 분류</font></td>
+		<td>&nbsp;&nbsp;&nbsp;<%= f.radio_button("Class", "1", :checked=>true) %> 구매자
+		<%= f.radio_button("Class", "2") %> 판매자
+		</td>
+	</tr>
+
+</table>
+
+<br><br>
+<div align=center><%= f.submit '등록' %></div>
+<% end %>

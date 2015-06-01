@@ -1,0 +1,22 @@
+<html>
+<head></head>
+<body>
+
+<table border="0" width="100%">
+<tr>
+<td><font size=5, color="#662500"><b>주문완료</b></font></td>
+
+<td align="right">01 <b>장바구니</b> > 02 <b>주문/결제</b> > <font size=4 color=green>03 <b>주문완료</b></td>
+</tr>
+</table>
+
+<br><br><br>
+
+
+<div style="text-align:center"><font size=4>결제가 완료되었습니다!</font><br><br><br><br><br>
+<%= link_to image_tag("check_order.jpg"), user_deal_path %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= link_to image_tag("home.jpg"), home_index_path %></div>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</body>
+</html>

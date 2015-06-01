@@ -1,0 +1,33 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  Seller_id: MyString
+  Buyer_id: MyString
+  Receiptor_name: MyString
+  Total_price: 1
+  Product_id: 1
+  Product_num: 1
+  Message: MyString
+  Phone: MyString
+  Address: MyString
+  Receipt: 1
+  Return: 1
+  picture: MyString
+  Notice_id: 1
+  Notice_name: MyString
+
+two:
+  Seller_id: MyString
+  Buyer_id: MyString
+  Receiptor_name: MyString
+  Total_price: 1
+  Product_id: 1
+  Product_num: 1
+  Message: MyString
+  Phone: MyString
+  Address: MyString
+  Receipt: 1
+  Return: 1
+  picture: MyString
+  Notice_id: 1
+  Notice_name: MyString

@@ -1,0 +1,193 @@
+<script>
+Classify = "<%= chk_class %>";
+
+if(Classify == 2){
+	parent.location.href = "/seller_home";
+}
+else if(Classify == 3){
+	parent.location.href = "/admin_home";
+}
+
+login = "<%= flash[:danger] %>";
+if(login == "id fail")
+	alert("존재하지 않는 아이디입니다.");
+else if(login == "pw fail")
+	alert("비밀번호를 다시 확인하세요");
+</script>
+<html>
+<head>
+<style>
+	.menu a{cursor:pointer;}
+	.menu .hide{display:none;}
+
+	.menu{list-style:none;}
+	.menu li{list-style:none;}
+</style>
+
+<script>
+    $(document).ready(function(){
+        $(".menu>a").click(function(){
+            var submenu = $(this).next("ul");
+ 
+            // submenu 가 화면상에 보일때는 위로 보드랍게 접고 아니면 아래로 보드랍게 펼치기
+            if( submenu.is(":visible") ){
+                submenu.slideUp();
+            }else{
+                submenu.slideDown();
+            }
+        }).mouseover(function(){
+            $(this).next("ul").slideDown();
+        });
+    });
+</script>
+</head>
+
+<body>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="5" style="border-collapse:collapse;">
+	<tr>
+	<td width="18%" align=center>
+		<font size=7 color="#FF0000"><b><%= image_tag("logo_12st.jpg", size:"160x95") %></b></font>
+	</td>
+
+	<td width="57%" align=center>
+		<table border="2" cellspacing="0" cellpadding="0" style="border-collapse:collapse;" bordercolor=red><tr>
+		<%= form_for :search, url: {action: "create"}, :html => {:target => "main_body"} do |f| %>
+			<td>
+			<table border="0" cellspacing="0" cellpadding="0"><tr>
+			<td>&nbsp;&nbsp;<%= f.select :param_category, options_for_select(["통합검색", "여성 상의", "여성 하의", "여성 원피스", "여성 가방/신발", "남성 상의", "남성 하의", "남성 아우터", "남성 가방/신발"]) %>
+			<%= f.search_field :main_search, size:50 %></td>
+
+			<td><%= f.submit '검색', :type => :image, :src => image_path("search.jpg") %></td>
+			
+			</table></td>
+		<% end %>
+		</tr></table>
+	</td>
+
+	<td>
+		<table width="100%" border="0" cellspacing="5" cellpadding="0">
+		<% if logged_in? %>
+			<tr>
+			<td align="center" colspan=2><b><%= current_user[:Name] %></b>님 환영합니다!</td>
+			</tr>
+			<tr>
+			<td align="center" colspan=2><%= current_user[:Mileage] %> 마일리지
+			<%= link_to image_tag("mileage_add.jpg", size:"20x20"), mileage_path(:id => current_user[:id]) %></td>
+			</tr>
+	
+			<tr>
+			<td align="right"><%= link_to image_tag("mypage.jpg", size:"80x30"), mypage_path, target:"main_body" %></td>
+			<td><%= link_to image_tag("logout.jpg", size:"80x30"), logout_path, method: :delete %></td>
+			</tr>
+		<% else %>
+			<%= form_for(:session, url: login_path) do |f| %>
+			<tr>
+				<td><table border="0" cellspacing="5" cellpadding="0">
+					<tr>
+						<td>ID</td>
+						<td width="80%"><%= f.text_field :login_id, required:true %></td>
+					</tr>
+
+					<tr>
+						<td >PW</td>
+						<td><%= f.text_field :login_pw, required:true, type:"password" %></td>
+					</tr>
+
+					<tr>
+						<td colspan=2 valign="middle" align=right><%= link_to(image_tag("join.jpg", size:"80x25"), new_join_path, target:"main_body") %><%= link_to(image_tag("idpw_search.jpg", size:"80x25"), idpw_search_path, target:"main_body") %>&nbsp;</td>
+					</tr>
+				</table></td>
+
+
+				<td valign="middle" align="center"><%= f.submit '로그인', :type => :image, :src => image_path("login.jpg") %></td>
+			</tr>
+			<% end %>
+		<% end %>
+		</table>
+	</td>
+	</tr>
+
+	<tr height="1%">
+		<td colspan=3><hr size=1 color=red></td>
+	</tr>
+	<tr valign=top>
+	<td width="20%">
+
+	
+<div>
+    <ul>
+        <li class="menu">
+            <a><%= image_tag("woman.jpg", :size => "150x40") %></a>
+            <ul class="hide">
+                <li><h2><%= link_to(image_tag("top.jpg", size:"100x30"), category_main_path(:param_category => "여성 상의"), target:"main_body") %></h2></li>
+                <li><h2><%= link_to(image_tag("pants.jpg", size:"100x30"), category_main_path(:param_category => "여성 하의"), target:"main_body") %></h2></li>
+                <li><h2><%= link_to(image_tag("outer.jpg", size:"100x30"), category_main_path(:param_category => "여성 아우터"), target:"main_body") %></h2></li>
+                <li><h2><%= link_to(image_tag("onepiece.jpg", size:"100x30"), category_main_path(:param_category => "여성 원피스"), target:"main_body") %></h2></li>
+                <li><h2><%= link_to(image_tag("bagshoes.jpg", size:"100x30"), category_main_path(:param_category => "여성 가방/신발"), target:"main_body") %></h2></li>
+            </ul>
+        </li>
+ 
+        <li class="menu">
+            <a><br><br><%= image_tag("man.jpg", :size => "150x40") %></a>
+            <ul class="hide">
+                <li><h2><%= link_to(image_tag("top.jpg", size:"100x30"), category_main_path(:param_category => "남성 상의"), target:"main_body") %></h2></li>
+                <li><h2><%= link_to(image_tag("pants.jpg", size:"100x30"), category_main_path(:param_category => "남성 하의"), target:"main_body") %></h2></li>
+                <li><h2><%= link_to(image_tag("outer.jpg", size:"100x30"), category_main_path(:param_category => "남성 아우터"), target:"main_body") %></h2></li>
+                <li><h2><%= link_to(image_tag("bagshoes.jpg", size:"100x30"), category_main_path(:param_category => "남성 가방/신발"), target:"main_body") %></h2></li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+	</td>
+                              
+	<td colspan=2 width="100%" height="100%" valign="top">
+      		<iframe src="/home/show" id="main_body" name="main_body" width="98%" height="100%" border="1" frameborder="0" marginwidth="0" marginheight="0"  scrolling="no"></iframe>
+
+		<script>
+			function resize_frame(id){
+				var frm = document.getElementById("main_body");
+				function resize() {
+					var ms_ie=false;
+					var ua=window.navigator.userAgent;
+					var old_ie=ua.indexOf('MSIE');
+					var new_ie=ua.indexOf('Trident/');
+
+					if((old_ie>-1) || (new_ie>-1)) {
+						ms_ie=true;
+					}
+
+					if(ms_ie) {
+						var iframeHeight=frm.contentWindow.document.body.scrollHeight;
+						frm.height=iframeHeight+20;
+					}
+
+					else {
+						frm.style.height="auto";
+						contentHeight=frm.contentWindow.document.documentElement.scrollHeight;
+						frm.style.height=contentHeight+23+"px";
+					}
+				}
+
+				if(frm.addEventListener) {
+					frm.addEventListener('load',resize,false);
+				}
+
+				else {
+					frm.attachEvent('onload', resize);
+				}
+			}
+			resize_frame('main_body');
+		</script>
+
+
+	</td>
+	</tr>
+                          
+</table>
+
+<br><br><br><br><br><br>
+
+</body>
+</html>

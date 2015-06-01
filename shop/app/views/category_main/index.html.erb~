@@ -1,0 +1,122 @@
+<html>
+<head>
+</head>
+<body>
+<%= @test %>
+
+
+<% if params[:param_category]=="여성 상의" %>
+	<font color="#662500", size=4><b>· 여성의류 > 상의</b></font>
+	
+<% elsif params[:param_category]=="여성 하의" %>
+	<font color="red", size=4><b>· 여성의류 > 하의</b></font>
+
+<% elsif params[:param_category]=="여성 아우터" %>
+	<font color="red", size=4><b>· 여성의류 > 아우터</b></font> 
+
+<% elsif params[:param_category]=="여성 원피스" %>
+	<font color="red", size=4><b>· 여성의류 > 원피스</b></font>
+
+<% elsif params[:param_category]=="여성 가방/신발" %>
+	<font color="red", size=4><b>· 여성의류 > 가방/신발</b></font> 
+
+<% elsif params[:param_category]=="남성 상의" %>
+	<font color="red", size=4><b>· 남성의류 > 상의</b></font> 
+
+<% elsif params[:param_category]=="남성 하의" %>
+	<font color="red", size=4><b>· 남성의류 > 하의</b></font> 
+
+<% elsif params[:param_category]=="남성 아우터" %>
+	<font color="red", size=4><b>· 남성의류 > 아우터</b></font> 
+
+<% elsif params[:param_category]=="남성 가방/신발" %>
+	<font color="red", size=4><b>· 남성의류 > 가방/신발</b></font> 
+
+<% else %>
+	<font color="red", size=4><b>> 통합검색 </b></font>
+<% end %>
+
+<br><br><br><br>
+<font size=4 color="#FF007F"><b>★인기 상품</b></font><br><br>
+
+<table border="1" style="border-collapse:collapse;" bordercolor="#A6A6A6"><tr><td>
+<div id="horizontal">
+	<ul>
+	<% @hot_item.each do |hot| %>
+	<li>
+		<table width=190 border="0">
+			<tr>
+				<td><%= link_to image_tag(hot.picture.url, size: "160"), notice_main_path(:param_noticeid => hot.id) %></td>
+			</tr>
+			<tr height=70>
+				<td><%= link_to hot.Title, notice_main_path(:param_noticeid => hot.id), {:style=>'color:#000000; text-decoration:none;'} %></td>
+			</tr>
+			<tr>
+				<td><b><%= hot.Price %>원</b></td>
+			</tr>
+		</table>
+	</li>
+	<% end %>	
+	</ul>
+	
+</div>
+</td></tr></table>
+
+<br><br>
+
+<div style="text-align:right"><%= link_to image_tag("order1", size:"75x20"), category_main_path(:param_category => params[:param_category]) %> | <%= link_to image_tag("order2", size:"75x20"), category_main_path(:param_category => params[:param_category], :param_order => "lowprice") %> | <%= link_to image_tag("order3", size:"75x20"), category_main_path(:param_category => params[:param_category], :param_order => "highprice") %></div>
+<hr color=black>
+
+<table width="100%" border="1" cellspacing="0" cellpadding="3" bordercolor="#A6A6A6" style="border-collapse:collapse;" rules="rows" frame="hsides">
+	<tr bgcolor="#FFB9B9">
+		<td colspan=2 align=center><font color=white>상품</font></td>
+		<td align=center><font color=white>가격</font></td>
+		<td align=center><font color=white>배송</font></td>
+		<td align=center><font color=white>판매자</font></td>
+	</tr>
+
+	<% if params[:param_order]=="lowprice" %>
+		<% @order_lowprice.each do |o| %>
+		<tr>
+			<td><%= link_to image_tag(o.picture.url, size: "150"), notice_main_path(:param_noticeid => o.id) %></td>
+			<td><%= link_to o.Title, notice_main_path(:param_noticeid => o.id), {:style=>'color:#000000; text-decoration:none;'} %></td>
+			<td align=center><%= o.Price %></td>
+			<td align=center>무료 배송</td>
+			<td align=center><%= o.Seller_id %></td>
+		</tr>
+		<% end %>
+
+	<% elsif params[:param_order]=="highprice" %>
+		<% @order_highprice.each do |h| %>
+		<tr>
+			<td><%= link_to image_tag(h.picture.url, size: "150"), notice_main_path(:param_noticeid => h.id) %></td>
+			<td><%= link_to h.Title, notice_main_path(:param_noticeid => h.id), {:style=>'color:#000000; text-decoration:none;'} %></td>
+			<td align=center><%= h.Price %></td>
+			<td align=center>무료 배송</td>
+			<td align=center><%= h.Seller_id %></td>
+		</tr>
+		<% end %>
+	
+	<% else %>
+		<% @notice_list.each do |n| %>
+		<tr>
+			<td><%= link_to image_tag(n.picture.url, size: "150"), notice_main_path(:param_noticeid => n.id) %></td>
+			<td><%= link_to n.Title, notice_main_path(:param_noticeid => n.id), {:style=>'color:#000000; text-decoration:none;'} %></td>
+			<td align=center><%= n.Price %></td>
+			<td align=center>무료 배송</td>
+			<td align=center><%= n.Seller_id %></td>	
+		</tr>
+		<% end %>
+	<% end %>
+</table>
+
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+</body>
+</html>

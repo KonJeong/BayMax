@@ -1,0 +1,169 @@
+<html>
+<head>
+</head>
+
+<body>
+<table border="0" width="100%">
+<tr>
+<td><font size=5, color="#662500"><b>주문/결제</b></font></td>
+
+<td align="right">01 <b>장바구니</b> > <font size=4 color=green>02 <b>주문/결제</b></font> > 03 <b>주문완료</b></td>
+</tr>
+</table>
+
+<br><br><br>
+<%= form_for :buy, url: {action: "create"}, :html => { :multipart => true} do |f| %>
+<font size=3><b>● 주문상품 확인</b></font><br><br>
+<table width="100%" border="1" cellspacing="10" cellpadding="10" style="border-collapse:collapse;" frame="hsides" bordercolor="#A6A6A6">
+	<tr bgcolor="EAEAEA">
+		<td colspan=2 width="50%" align=center>상품/옵션정보</td>
+		<td width="10%" align=center>수량</td>
+		<td width="10%" align=center>배송비</td>
+		<td width="15%" align=center>상품금액</td>
+		<td width="15%" align=center>판매자</td>
+	</tr>
+
+	<% if @shoppingbag %>
+		<% @shoppingbag.each do |s| %>
+		<tr>
+			<td width="10%"><%= image_tag Notice.find_by_id(s.Notice_id).picture.url, size:"120" %></td>
+			<td width="40%"><%= s.Notice_title %><br><br><font color="#0000FF"><%= s.Product_name %></font></td>
+			<td align=center><%= s.Product_num %>개</td>
+			<td align=center>
+				<% if s.Deliver_charge==0 %>
+					무료
+				<% else %>
+					<%= s.Deliver_charge %>원
+				<% end %>
+			</td>
+			<td align=center><%= s.Product_price %>원</td>
+			<td align=center><%= Notice.find_by_id(s.Notice_id).Seller_id %></td>
+			<% @total_price = @total_price + s.Product_price + s.Deliver_charge %>
+			<%= hidden_field_tag "shoppingbag_ids[]", s.id %>
+			<%= hidden_field_tag(:param_totalprice, @total_price) %>
+			<%= hidden_field_tag(:param_productnum, @product_num) %>
+			<%= hidden_field_tag(:param_remainmileage, @remain_mileage) %>
+		</tr>
+		<% end %>
+
+	<% else %>
+		<% @notice.each do |n| %>
+		<% @product_select.each do |p| %>
+		<tr>
+			<td width="10%"><%= image_tag n.picture.url, size:"120" %></td>
+			<td width="40%"><%= n.Title %><br><br><font color="#0000FF"><%= p.Name %></font></td>
+			<td align=center><%= @product_num %>개</td>
+			<td align=center>
+				<% if n.Deliver_charge==0 %>
+					무료
+				<% else %>
+					<%= n.Deliver_charge %>원
+				<% end %>
+			</td>
+			<td align=center><%= (n.Price+p.Price)*@product_num.to_i %>원</td>
+			<td align=center><%= n.Seller_id %></td>
+			<% @total_price = ((n.Price+p.Price)*@product_num.to_i) + n.Deliver_charge %>
+
+			<%= hidden_field_tag(:param_noticeid, n.id) %>
+			<%= hidden_field_tag(:param_noticename, n.Title) %>
+			<%= hidden_field_tag(:param_productid, p.id) %>
+			<%= hidden_field_tag(:param_sellerid, n.Seller_id) %>
+		</tr>
+		<% end %>
+		<% end %>
+		
+	<% end %>
+</table><br>
+
+<font color="#FF0000">12번가는 통신판매중개자이며 통신판매의 당사자가 아닙니다. 따라서 12번가는 상품, 거래정보 및 거래에 대하여 책임을 지지 않습니다.</font><br><br><br><br>
+
+
+<font size=3><b>● 배송지 정보</b></font><br><br>
+
+<table width="100%" border="1" cellspacing="20" cellpadding="10" style="border-collapse:collapse;" frame="hsides" bordercolor="#A6A6A6">
+	<tr>
+		<% @member.each do |m| %>
+		<td align=center rowspan=2 width="20%">배송지 주소</td>
+		<td><%= f.radio_button("Address", "pre", :checked=>true) %> 회원정보와 동일</td>
+		<td style="border-left:1px solid"><%= f.text_field :Addresspre, size:60, maxlength:50, value:m.Address %></td>
+	</tr>
+
+	
+	<tr>
+		<td><%= f.radio_button("Address", "new") %> 새로운 배송지 입력</td>
+		<td style="border-left:1px solid"><%= f.text_field :Addressnew, size:60, maxlength:50 %></td>
+	</tr>
+
+	<tr>
+		<td align=center>수취인 이름</td>
+		<td colspan=2><%= f.text_field :Receiptor_name, required:true, maxlength:10, value:m.Name %></td>
+	</tr>
+
+	<tr>
+		<td align=center>수취인 휴대폰</td>
+		<td colspan=2><%= f.telephone_field :Phone, required:true, maxlength:15, value:m.Phone %></td>
+		<% end %>
+	</tr>
+
+	<tr>
+		<td align=center>배송시 요청사항</td>
+		<td colspan=2><%= f.text_field :Message, required:false, maxlength:80 %></td>
+	</tr>
+</table>
+<br><br><br><br>
+
+<font size=3><b>● 결제 정보</b></font><br><br>
+<table width="100%" border="1" cellspacing="20" cellpadding="10" style="border-collapse:collapse;" frame="hsides" bordercolor="#A6A6A6">
+	<tr>
+		<td align=center width="20%">총 금액</td>
+		<td width="50%"><font size=6 color=red><b>&nbsp;&nbsp;&nbsp;<%= @total_price %>원</b></font></td>
+		<td padding-left="10" rowspan=2 valign=middle align=center><%= f.submit '결제하기', :type => :image, :src => image_path("pay.jpg") %><br><br>
+		<%= link_to image_tag("cancel.jpg", size:"100x40"), :back %></td>
+	</tr>
+
+	<tr>
+		<td align=center>마일리지</td>
+		<td>
+			<table width="100%" border="0">
+				<tr>
+					<td width="10%">현재:</td>
+					<td><font size=4 color=blue><b><%= current_user[:Mileage] %></b></font>점</td>
+				</tr>
+
+				<tr>
+					<td align=right>-</td>
+					<td>&nbsp;&nbsp;&nbsp;<%= @total_price %>원</td>
+				</tr>
+
+				<tr>
+					<td colspan=2>-------------------------------------------------------</td>
+					
+				</tr>
+
+				<tr>
+					<td>잔여:</td>
+					<% @remain_mileage = current_user[:Mileage]-@total_price.to_i %>
+					<td>&nbsp;&nbsp;<%= @remain_mileage %>원
+						<% if @remain_mileage > 0 %>
+						<% else %>
+							<font color=red>&nbsp;&nbsp;마일리지를 충전하세요!</font>
+						<% end %>
+					</td>
+				</tr>
+
+			</table>
+		</td>
+	</tr>
+</table>
+
+<% if @shoppingbag.blank? %>
+	<%= hidden_field_tag(:param_totalprice, @total_price) %>
+	<%= hidden_field_tag(:param_productnum, @product_num) %>
+	<%= hidden_field_tag(:param_remainmileage, @remain_mileage) %>
+<% end %>
+
+<% end %>
+
+
+</body>
+</html>

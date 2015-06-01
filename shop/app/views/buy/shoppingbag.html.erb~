@@ -1,0 +1,60 @@
+<html>
+<head></head>
+
+<body>
+<font size=5><b>장바구니</b></font>
+<div style="text-align:right"><font size=4 color=green>01 <b>장바구니</b></font> > 02 <b>주문/결제</b> > 03 <b>주문완료</b></div>
+<hr size=2 color=black><br><br>
+
+<table width="100%" border="1" cellspacing="10" cellpadding="10" style="border-collapse:collapse;" frame="hsides" bordercolor="#A6A6A6">
+	<tr bgcolor="EAEAEA">
+		<td width="5%" align=center>v</td>
+		<td width="40%" colspan=2 align=center>상품명</td>
+		<td width="10%" align=center>수량</td>
+		<td width="10%" align=center>상품가격</td>
+		<td width="15%" align=center>합계</td>
+		<td align=center>배송비</td>
+	</tr>
+
+	<% @notice.each do |n| %>
+	<% @product_select.each do |p| %>
+	<tr>
+		<td align=center>v</td>
+		<td width="5%"><%= image_tag n.picture.url, size:"120" %></td>
+		<td width="35%"><%= n.Title %><br><br><font color="#0000FF"><%= p.Name %></font></td>
+		<td align=center><%= @product_num %>개</td>
+		<td align=center><%= n.Price %>원</td>
+		<td align=center><%= (n.Price+p.Price)*@product_num.to_i %>원</td>
+		<td align=center>
+			<% if n.Deliver_charge==0 %>
+				무료
+			<% else %>
+				<%= n.Deliver_charge %>원
+			<% end %>
+		</td>
+	</tr>
+	<% end %>
+	<% end %>
+</table>
+<br>선택삭제<br><br><br><br>
+
+<table width="100%" border="2" cellspacing="10" cellpadding="20" style="border-collapse:collapse;" frame="hsides" bordercolor="#A6A6A6">
+	<tr bgcolor="EAEAEA">
+		<td align=center>상품 가격</td>
+		<td align=center>총 배송비</td>
+		<td align=center>총 구매금액</td>
+	</tr>
+
+	<tr>
+		<td align=center>9,800원</td>
+		<td align=center>0원</td>
+		<td align=center>9,800원</td>
+	</tr>
+</table><br><br>
+
+<% @notice.each do |n| %>
+<div style="text-align:center"><h2><%= link_to '주문하기', buy_new_path(:param_product_select => @product_select, :param_product_num => @product_num, :param_noticeid => n.id) %><h2></div>
+<% end %>
+
+</body>
+</html>

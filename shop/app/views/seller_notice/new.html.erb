@@ -1,0 +1,60 @@
+<html>
+<head></head>
+<body>
+<%= form_for :notice, url: {action: "create"}, :html => { :multipart => true} do |f| %>
+<table width="90%" border="0" cellspacing="0" cellpadding="20" align="center">
+ <tr><br><br></td>
+ <tr>
+  <td align="center"><h2>게시글 등록</h2><br><br></td>
+ </tr>
+ <tr>
+  <td align="center"><table width="95%" align="center" rules="rows" border="1" cellspacing="0" cellpadding="10" frame="hsides">
+   <tr>
+    <td width="23%" align="center" bgcolor="#EAEAEA"><font size=4>게시글 제목</font></td>		
+    <td width="77%">&nbsp;&nbsp;&nbsp;
+	<%= f.text_field :Title, required:true, maxlength:50, autofocus:true %>
+	</td>
+   </tr>
+   <tr>
+    <td align="center" bgcolor="#EAEAEA"><font size=4>메인 사진</font></td>
+    <td>&nbsp;&nbsp;&nbsp;<%= f.file_field :picture %> </td>
+   </tr>
+   <tr>
+    <td align="center" bgcolor="#EAEAEA"><font size=4>기준 금액</font></td>
+    <td>&nbsp;&nbsp;&nbsp;<%= f.text_field :Price, size:10, maxlength:10 %></td>
+   </tr>
+   <tr>
+    <td align="center" bgcolor="#EAEAEA"><font size=4>배송비</font></td>
+	<td>&nbsp;&nbsp;&nbsp;<%= f.text_field :Deliver_charge, size:5, maxlength:5 %></td>
+   </tr>
+   <tr>
+    <td align="center" bgcolor="#EAEAEA"><font size=4>성별</font></td>
+    <td>&nbsp;&nbsp;&nbsp;
+     <%= f.radio_button("Sex", "male", :checked=>true) %> 남자
+     <%= f.radio_button("Sex", "female") %> 여자</td>
+   </tr>
+   <tr>
+    <td align="center" bgcolor="#EAEAEA"><font size=4>연령층</font></td>
+    <td>&nbsp;&nbsp;
+     <%= f.select :Age, options_for_select(["선택하세요", "10대", "20대", "30대", "40대", "50대", "60대 이상"],
+                                             :disabled => ["선택하세요"], :selected => ["선택하세요"]) %>
+    </td>
+   </tr>
+   <tr>
+    <td align="center" bgcolor="#EAEAEA"><font size=4>카테고리</font></td>
+    <td>&nbsp;&nbsp;&nbsp;<%= f.select :Category, 
+						options_for_select(["선택하세요", "여성 상의", "여성 하의",
+						"여성 아우터", "여성 원피스", "여성 가방/신발", "남성 상의",
+						"남성 하의", "남성 아우터", "남성 가방/신발"], 
+						:disabled => ["선택하세요"], :selected => ["선택하세요"])%>
+    </td>
+   </tr>
+  </table></td>
+ </tr>
+ <tr>
+  <td align="center"><br><br><br><%= f.submit '추가' %>&nbsp;&nbsp;&nbsp; <input type=button name=notice_new_cancel value='취소'></td>
+ </tr>
+</table>
+<% end %>
+</body>
+</html>
